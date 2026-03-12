@@ -23,8 +23,6 @@ export async function joinWaitlist(
   formData: FormData,
 ): Promise<WaitlistActionState> {
   const email = getStringValue(formData.get("email")).toLowerCase();
-  const salonName = getStringValue(formData.get("salon_name"));
-  const city = getStringValue(formData.get("city"));
 
   if (!EMAIL_REGEX.test(email)) {
     return {
@@ -33,32 +31,15 @@ export async function joinWaitlist(
     };
   }
 
-  if (salonName.length < 2) {
-    return {
-      status: "error",
-      message: "Indiquez le nom de votre salon pour rejoindre la liste privée.",
-    };
-  }
-
-  if (city.length < 2) {
-    return {
-      status: "error",
-      message: "Ajoutez votre ville pour que le matching soit plus précis.",
-    };
-  }
-
   try {
     const supabase = createSupabaseServerClient();
 
     const { error } = await supabase.from("waitlist_leads").insert({
-      city,
       email,
-      salon_name: salonName,
       source: "laloge-waitlist",
       status: "new",
       metadata: {
-        form: "luxury-waitlist-landing",
-        surface: "bottom-hero",
+        form: "framer-v4-minimal-waitlist",
         submitted_at: new Date().toISOString(),
       },
     });

@@ -17,21 +17,21 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "La Loge — Liste d’attente",
+  title: "La Loge — Rejoignez la liste d’attente",
   description:
-    "Rejoignez La Loge — scoring intelligent, enrichissement automatique et mise en relation avec les grandes marques beauté.",
+    "La conciergerie beauté IA qui négocie les meilleures conditions auprès des marques pour votre salon.",
   openGraph: {
-    title: "La Loge — Liste d’attente",
+    title: "La Loge — Rejoignez la liste d’attente",
     description:
-      "La conciergerie beauté qui négocie pour les meilleurs salons de France.",
+      "Accès sur invitation à la conciergerie beauté IA pensée pour les salons exigeants.",
     locale: "fr_FR",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "La Loge — Liste d’attente",
+    title: "La Loge — Rejoignez la liste d’attente",
     description:
-      "La conciergerie beauté qui négocie pour les meilleurs salons de France.",
+      "Accès sur invitation à la conciergerie beauté IA pensée pour les salons exigeants.",
   },
 };
 

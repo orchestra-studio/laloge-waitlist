@@ -12,64 +12,37 @@ export const initialWaitlistState: WaitlistActionState = {
   message: "",
 };
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function getStringValue(value: FormDataEntryValue | null) {
-  return typeof value === "string" ? value.trim() : "";
-}
-
 export async function joinWaitlist(
-  _prevState: WaitlistActionState,
-  formData: FormData,
+  _prev: WaitlistActionState,
+  formData: FormData
 ): Promise<WaitlistActionState> {
-  const email = getStringValue(formData.get("email")).toLowerCase();
+  const raw = formData.get("email");
+  const email = typeof raw === "string" ? raw.trim().toLowerCase() : "";
 
-  if (!EMAIL_REGEX.test(email)) {
-    return {
-      status: "error",
-      message: "Merci d’entrer une adresse email valide.",
-    };
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { status: "error", message: "Merci d'entrer une adresse email valide." };
   }
 
   try {
     const supabase = createSupabaseServerClient();
-
     const { error } = await supabase.from("waitlist_leads").insert({
       email,
       source: "laloge-waitlist",
       status: "new",
-      metadata: {
-        form: "framer-v4-minimal-waitlist",
-        submitted_at: new Date().toISOString(),
-      },
+      metadata: { submitted_at: new Date().toISOString() },
     });
 
     if (error) {
       if (error.code === "23505") {
-        return {
-          status: "duplicate",
-          message: "Vous êtes déjà inscrit !",
-        };
+        return { status: "duplicate", message: "Vous êtes déjà inscrit — on vous contactera bientôt." };
       }
-
-      console.error("[joinWaitlist] Supabase insert failed", error);
-
-      return {
-        status: "error",
-        message: "Une erreur est survenue. Réessayez dans un instant.",
-      };
+      console.error("[joinWaitlist]", error);
+      return { status: "error", message: "Une erreur est survenue. Réessayez." };
     }
 
-    return {
-      status: "success",
-      message: "Vous êtes sur la liste ! 🎉",
-    };
-  } catch (error) {
-    console.error("[joinWaitlist] Unexpected error", error);
-
-    return {
-      status: "error",
-      message: "Impossible d’enregistrer votre demande pour le moment.",
-    };
+    return { status: "success", message: "Vous êtes sur la liste ! On vous contactera avant l'ouverture." };
+  } catch (e) {
+    console.error("[joinWaitlist]", e);
+    return { status: "error", message: "Impossible d'enregistrer pour le moment." };
   }
 }

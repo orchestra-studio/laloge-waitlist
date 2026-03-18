@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BarChart3,
   Crown,
@@ -9,14 +9,15 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { motion } from "motion/react";
-import Image from "next/image";
 import { WaitlistForm } from "../components/waitlist-form";
+import { GlassBackground } from "../components/glass-background";
+
+/* ───── Constants ───── */
 
 const TARGET = new Date("2026-06-01T00:00:00+02:00").getTime();
 
 function getTimeLeft() {
   const difference = Math.max(TARGET - Date.now(), 0);
-
   return {
     days: Math.floor(difference / 86400000),
     hours: Math.floor((difference / 3600000) % 24),
@@ -26,192 +27,133 @@ function getTimeLeft() {
 
 type TimeLeft = ReturnType<typeof getTimeLeft>;
 
-const UNITS: Array<{ key: keyof TimeLeft; label: string; pad: number }> = [
-  { key: "days", label: "jours", pad: 3 },
-  { key: "hours", label: "heures", pad: 2 },
-  { key: "minutes", label: "minutes", pad: 2 },
+const FEATURES: Array<{ icon: LucideIcon; title: string }> = [
+  { icon: BarChart3, title: "Diagnostic offert" },
+  { icon: Shield, title: "Tarifs négociés" },
+  { icon: MessageCircle, title: "Concierge dédié" },
+  { icon: Crown, title: "Statut Fondateur" },
 ];
 
-const FEATURES = [
-  {
-    icon: BarChart3,
-    title: "Diagnostic confidentiel",
-    description:
-      "Analyse complète de votre positionnement, benchmark local et potentiel de croissance",
+/* ───── Animation variants ───── */
+
+const stagger = {
+  hidden: {},
+  visible: {
+    transition: { delayChildren: 0.25, staggerChildren: 0.08 },
   },
-  {
-    icon: Shield,
-    title: "Négociation marques",
-    description:
-      "De meilleures conditions auprès des grandes maisons : Revlon, Schwarzkopf, Wella et plus",
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 14 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring" as const, bounce: 0.15, duration: 0.7 },
   },
-  {
-    icon: MessageCircle,
-    title: "Concierge dédié",
-    description:
-      "Un interlocuteur unique pour tous vos besoins professionnels, disponible quand vous en avez besoin",
-  },
-  {
-    icon: Crown,
-    title: "Cercle fondateur",
-    description:
-      "Rejoignez un réseau sélectif de salons d'excellence avec des avantages exclusifs à vie",
-  },
-] satisfies Array<{
-  icon: LucideIcon;
-  title: string;
-  description: string;
-}>;
+};
+
+/* ───── Page ───── */
 
 export default function Home() {
   const [time, setTime] = useState<TimeLeft>(getTimeLeft);
+  const [count, setCount] = useState(73);
+  const [ticked, setTicked] = useState(false);
 
   useEffect(() => {
-    const intervalId = setInterval(() => setTime(getTimeLeft()), 1000);
-    return () => clearInterval(intervalId);
+    const id = setInterval(() => setTime(getTimeLeft()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  /* Scarcity counter tick — simulates a new signup after ~18 s */
+  useEffect(() => {
+    const tickTimer = setTimeout(() => {
+      setCount(74);
+      setTicked(true);
+      setTimeout(() => setTicked(false), 1200);
+    }, 18000);
+    return () => clearTimeout(tickTimer);
   }, []);
 
   return (
     <div className="page">
-      <div className="bg">
-        <Image
-          src="/bg-burst.webp"
-          alt=""
-          fill
-          priority
-          quality={90}
-          sizes="100vw"
-        />
-      </div>
+      <GlassBackground />
 
-      <main className="main">
-        <div className="main-stack">
-          <motion.section
-            className="section"
-            initial={{ opacity: 0.001, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", bounce: 0.2, delay: 0.3, duration: 1 }}
-            aria-labelledby="wl-title"
-          >
-            <div className="heading">
-              <span className="badge">✨ Accès avant-première</span>
-              <h1 id="wl-title" className="title">
-                Entrez dans le cercle.
-              </h1>
-              <p className="subtitle">
-                La Loge représente les salons indépendants d&apos;excellence
-                auprès des grandes marques. Diagnostic confidentiel de votre
-                salon, conditions négociées et accompagnement premium.
-              </p>
-            </div>
+      <section className="hero" aria-labelledby="wl-title">
+        <motion.div
+          className="hero-content"
+          initial="hidden"
+          animate="visible"
+          variants={stagger}
+        >
+          <motion.span className="badge" variants={fadeUp}>
+            ✨ Accès avant-première
+          </motion.span>
 
+          <motion.h1 id="wl-title" className="title" variants={fadeUp}>
+            Entrez dans le cercle.
+          </motion.h1>
+
+          <motion.p className="subtitle" variants={fadeUp}>
+            La première conciergerie beauté pour salons d&apos;exception.
+          </motion.p>
+
+          <motion.div variants={fadeUp} className="form-section">
             <WaitlistForm />
-
-            <div className="scarcity" aria-label="Disponibilité limitée">
-              <p className="scarcity-heading">
-                73 / 100 salons fondateurs déjà inscrits
-              </p>
-              <div
-                className="scarcity-bar"
-                role="progressbar"
-                aria-label="73 sur 100 salons fondateurs déjà inscrits"
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-valuenow={73}
-              >
-                <span className="scarcity-fill" />
-              </div>
-              <p className="scarcity-text">
-                Accès limité pour garantir un accompagnement d&apos;excellence
-              </p>
-            </div>
-
-            <div className="social-proof">
-              <div className="avatars" aria-hidden="true">
-                <Image
-                  className="avatar"
-                  src="/avatar-1.png"
-                  alt=""
-                  width={28}
-                  height={28}
-                />
-                <Image
-                  className="avatar"
-                  src="/avatar-2.png"
-                  alt=""
-                  width={28}
-                  height={28}
-                />
-                <Image
-                  className="avatar"
-                  src="/avatar-3.png"
-                  alt=""
-                  width={28}
-                  height={28}
-                />
-              </div>
-              <p>Plus de 1 700 salons déjà analysés à travers la France</p>
-            </div>
-
-            <div className="countdown" aria-label="Compte à rebours">
-              {UNITS.map((unit, index) => (
-                <Fragment key={unit.key}>
-                  <div className="countdown-unit">
-                    <span className="countdown-value">
-                      {String(time[unit.key]).padStart(unit.pad, "0")}
-                    </span>
-                    <span className="countdown-label">{unit.label}</span>
-                  </div>
-                  {index < UNITS.length - 1 && (
-                    <span className="countdown-sep" aria-hidden="true">
-                      |
-                    </span>
-                  )}
-                </Fragment>
-              ))}
-            </div>
-          </motion.section>
+          </motion.div>
 
           <motion.div
-            className="features"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: {},
-              visible: {
-                transition: {
-                  delayChildren: 0.45,
-                  staggerChildren: 0.1,
-                },
-              },
-            }}
+            className="scarcity"
+            variants={fadeUp}
+            aria-label="Disponibilité limitée"
           >
-            {FEATURES.map(({ icon: Icon, title, description }) => (
-              <motion.article
-                key={title}
-                className="feature-card"
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ type: "spring", stiffness: 120, damping: 16 }}
-              >
-                <div className="feature-icon" aria-hidden="true">
-                  <Icon size={20} strokeWidth={1.9} />
+            <p className={`scarcity-heading${ticked ? " ticked" : ""}`}>
+              🔥 {count}/100 — Plus que {100 - count} places
+            </p>
+            <div
+              className="scarcity-bar"
+              role="progressbar"
+              aria-label={`${count} sur 100 salons fondateurs déjà inscrits`}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={count}
+            >
+              <span
+                className="scarcity-fill"
+                style={{ width: `${count}%` }}
+              />
+            </div>
+          </motion.div>
+
+          <motion.div className="features" variants={fadeUp}>
+            {FEATURES.map(({ icon: Icon, title }) => (
+              <div key={title} className="feature-pill">
+                <div className="feature-pill-icon" aria-hidden="true">
+                  <Icon size={16} strokeWidth={1.8} />
                 </div>
-                <h2 className="feature-title">{title}</h2>
-                <p className="feature-desc">{description}</p>
-              </motion.article>
+                <span className="feature-pill-title">{title}</span>
+              </div>
             ))}
           </motion.div>
-        </div>
-      </main>
+
+          <motion.div className="bottom-info" variants={fadeUp}>
+            <span className="countdown-compact" aria-label="Compte à rebours">
+              {String(time.days).padStart(2, "0")}j :{" "}
+              {String(time.hours).padStart(2, "0")}h :{" "}
+              {String(time.minutes).padStart(2, "0")}m
+            </span>
+            <span className="info-dot" aria-hidden="true" />
+            <span className="social-compact">
+              1 700+ salons analysés · Rejoignez les {count} fondateurs
+            </span>
+          </motion.div>
+        </motion.div>
+      </section>
 
       <footer className="footer">
         <div className="footer-inner">
           <span>La Loge</span>
           <span className="footer-dot" />
-          <span>Conciergerie Beauté IA</span>
+          <span>Conciergerie Beauté</span>
         </div>
       </footer>
     </div>

@@ -32,32 +32,36 @@ export function WaitlistForm() {
           </div>
         </label>
 
-        <label className="form-label">
-          <div className="form-input-wrapper">
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="votre@email.com"
-              autoComplete="email"
-              aria-label="Adresse email"
-              className="form-input"
-            />
-          </div>
-        </label>
+        <div className="form-inline-row">
+          <label className="form-label">
+            <div className="form-input-wrapper">
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="votre@email.com"
+                autoComplete="email"
+                aria-label="Adresse email"
+                className="form-input"
+              />
+            </div>
+          </label>
 
-        <button type="submit" disabled={isPending} className="form-btn">
-          {isPending ? "Envoi..." : "Demander mon accès"}
-        </button>
-
-        <p className="micro-text">Gratuit · Sans engagement</p>
+          <button type="submit" disabled={isPending} className="form-btn">
+            {isPending ? "Envoi…" : "🔒 Réserver ma place"}
+          </button>
+        </div>
       </form>
 
       {state.status !== "idle" && (
-        <p className={`feedback ${state.status}`} aria-live="polite">
+        <p className={`feedback ${state.status}`} role="status" aria-live="polite">
           {state.message}
         </p>
       )}
+
+      <p className="micro-text">
+        Sans engagement · 100% gratuit · Diagnostic en 48h
+      </p>
     </div>
   );
 }

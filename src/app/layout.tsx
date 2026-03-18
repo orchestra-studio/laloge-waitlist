@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Instrument_Serif, Outfit } from "next/font/google";
 import "./globals.css";
 
-const geist = Geist({
-  variable: "--font-geist",
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400"],
+  style: ["normal", "italic"],
+});
+
+const outfit = Outfit({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -24,8 +31,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="fr">
-      <body className={geist.variable}>{children}</body>
+    <html lang="fr" data-theme="light" style={{ colorScheme: "light" }}>
+      <body className={`${instrumentSerif.variable} ${outfit.variable}`}>
+        {children}
+      </body>
     </html>
   );
 }

@@ -33,7 +33,7 @@ const FEATURES: Array<{ icon: LucideIcon; title: string }> = [
   { icon: BarChart3, title: "Diagnostic offert" },
   { icon: Shield, title: "Tarifs négociés" },
   { icon: MessageCircle, title: "Concierge dédié" },
-  { icon: Crown, title: "Statut Fondateur" },
+  { icon: Crown, title: "Statut Ambassadeur" },
 ];
 
 /* ───── Reduced motion hook ───── */
@@ -145,7 +145,7 @@ export default function Home() {
               <div
                 className="scarcity-track"
                 role="progressbar"
-                aria-label={`${count} sur 100 salons fondateurs déjà inscrits`}
+                aria-label={`${count} sur 100 salons ambassadeurs déjà inscrits`}
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={count}
@@ -160,7 +160,7 @@ export default function Home() {
               <span className="scarcity-pct">{count}%</span>
             </div>
             <p className={`scarcity-label${ticked ? " ticked" : ""}`}>
-              {count}/100 places fondateur
+              {count}/100 places ambassadeur
             </p>
           </motion.div>
 

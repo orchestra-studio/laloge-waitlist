@@ -28,12 +28,12 @@
   --paper: #f8f6f1;
   --warm-cream: #f5e8dc;
 
-  /* Glass tokens — whiter */
-  --glass-bg: rgba(255, 255, 255, 0.25);
-  --glass-blur: 24px;
-  --glass-border: rgba(255, 255, 255, 0.35);
-  --glass-border-top: rgba(255, 255, 255, 0.55);
-  --glass-radius: 24px;
+  /* Glass tokens — Apple liquid glass */
+  --glass-bg: rgba(255, 255, 255, 0.35);
+  --glass-blur: 32px;
+  --glass-border: rgba(255, 255, 255, 0.50);
+  --glass-border-top: rgba(255, 255, 255, 0.70);
+  --glass-radius: 28px;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -107,14 +107,14 @@ select {
   z-index: 0;
   overflow: hidden;
 
-  /* Much whiter gradient — airy with hint of warm cream */
+  /* Apple-white gradient — barely-there warm touch at bottom */
   background: linear-gradient(
-    135deg,
-    #ffffff 0%,
-    #faf8f5 20%,
-    #f5f0eb 45%,
-    #ede8de 70%,
-    #e5ddd0 100%
+    160deg,
+    #FFFFFF 0%,
+    #FAFAFA 30%,
+    #F7F7F7 60%,
+    #F2F0ED 85%,
+    #EDE8DE 100%
   );
 }
 
@@ -221,8 +221,8 @@ select {
   height: 70%;
   background: radial-gradient(
     ellipse at 50% 30%,
-    rgba(255, 255, 255, 0.5) 0%,
-    rgba(255, 255, 255, 0.15) 40%,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0.25) 40%,
     transparent 70%
   );
   pointer-events: none;
@@ -257,14 +257,16 @@ select {
    ═══════════════════════════════════════════ */
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(24px) saturate(1.3);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-top: 1px solid rgba(255, 255, 255, 0.55);
-  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(32px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.50);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.70);
+  border-radius: 28px;
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    0 8px 40px rgba(0, 0, 0, 0.04),
+    0 1px 3px rgba(0, 0, 0, 0.02),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15);
   padding: 1.5rem;
 }
 
@@ -299,10 +301,10 @@ select {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.60);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(16px) saturate(1.2);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px) saturate(1.4);
   padding: 0.375rem 1rem;
   color: var(--dark-warm);
   font-family: var(--font-body), sans-serif;
@@ -311,8 +313,8 @@ select {
   letter-spacing: 0.08em;
   line-height: 1;
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    0 4px 16px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 /* ───── Title ───── */
@@ -374,10 +376,10 @@ select {
 .form-input {
   width: 100%;
   min-height: 2.625rem;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255, 255, 255, 0.50);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.40);
+  backdrop-filter: blur(16px);
   padding: 0 1rem;
   color: var(--dark-warm);
   font-family: var(--font-body), sans-serif;
@@ -419,7 +421,7 @@ select {
   width: 100%;
   min-height: 2.625rem;
   border: none;
-  border-radius: 12px;
+  border-radius: 16px;
   background: var(--bronze);
   padding: 0 1.25rem;
   color: #fff;
@@ -430,8 +432,8 @@ select {
   white-space: nowrap;
   cursor: pointer;
   box-shadow:
-    0 4px 16px rgba(158, 139, 110, 0.25),
-    0 1px 3px rgba(0, 0, 0, 0.08);
+    0 4px 20px rgba(158, 139, 110, 0.25),
+    0 1px 3px rgba(0, 0, 0, 0.06);
   transition:
     background-color 250ms ease,
     transform 150ms ease,
@@ -442,8 +444,8 @@ select {
   background: #b09a7e;
   transform: translateY(-1px);
   box-shadow:
-    0 6px 20px rgba(158, 139, 110, 0.3),
-    0 2px 6px rgba(0, 0, 0, 0.1);
+    0 6px 30px rgba(158, 139, 110, 0.35),
+    0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .form-btn:disabled {
@@ -542,8 +544,8 @@ select {
   height: 5px;
   overflow: hidden;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(4px);
+  background: rgba(255, 255, 255, 0.30);
+  backdrop-filter: blur(12px);
 }
 
 .scarcity-fill {
@@ -578,13 +580,13 @@ select {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.875rem;
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(16px) saturate(1.2);
+  background: rgba(255, 255, 255, 0.40);
+  backdrop-filter: blur(28px) saturate(1.4);
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    0 4px 20px rgba(0, 0, 0, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
   transition:
     border-color 300ms ease,
     box-shadow 300ms ease,
@@ -592,10 +594,10 @@ select {
 }
 
 .feature-pill:hover {
-  border-color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.70);
   box-shadow:
-    0 6px 20px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    0 6px 24px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
   transform: translateY(-1px);
 }
 
@@ -748,6 +750,23 @@ select {
   .glass-bg-network {
     width: 100%;
     height: 100%;
+  }
+
+  /* Reduced glass blur on mobile for performance */
+  .glass-card {
+    backdrop-filter: blur(20px) saturate(1.3);
+  }
+
+  .feature-pill {
+    backdrop-filter: blur(20px) saturate(1.3);
+  }
+
+  .badge {
+    backdrop-filter: blur(16px) saturate(1.2);
+  }
+
+  .form-input {
+    backdrop-filter: blur(12px);
   }
 }
 

@@ -26,7 +26,7 @@ export function GlassBackground() {
   }, []);
 
   const particles = isMobile
-    ? ALL_PARTICLES.slice(0, 18)
+    ? ALL_PARTICLES.slice(0, 12)
     : ALL_PARTICLES;
 
   return (

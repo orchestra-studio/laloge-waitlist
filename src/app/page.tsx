@@ -94,7 +94,7 @@ export default function Home() {
           </motion.h1>
 
           <motion.p className="subtitle" variants={fadeUp}>
-            La première conciergerie beauté pour salons d&apos;exception.
+            La conciergerie beauté pour salons d&apos;exception.
           </motion.p>
 
           <motion.div variants={fadeUp} className="form-section">

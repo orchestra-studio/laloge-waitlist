@@ -19,19 +19,6 @@ export function WaitlistForm() {
   return (
     <div className="waitlist-form-stack">
       <form ref={formRef} action={formAction} className="form">
-        <label className="form-label">
-          <div className="form-input-wrapper">
-            <input
-              type="text"
-              name="salon_name"
-              placeholder="Nom de votre salon (optionnel)"
-              autoComplete="organization"
-              aria-label="Nom de votre salon"
-              className="form-input"
-            />
-          </div>
-        </label>
-
         <div className="form-inline-row">
           <label className="form-label">
             <div className="form-input-wrapper">
@@ -60,7 +47,7 @@ export function WaitlistForm() {
       )}
 
       <p className="micro-text">
-        Sans engagement · 100% gratuit · Diagnostic en 48h
+        Sans engagement · Gratuit
       </p>
     </div>
   );

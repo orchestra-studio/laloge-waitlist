@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   BarChart3,
   Crown,
@@ -27,6 +27,8 @@ function getTimeLeft() {
 
 type TimeLeft = ReturnType<typeof getTimeLeft>;
 
+const TITLE_WORDS = ["Entrez", "dans", "le", "cercle."];
+
 const FEATURES: Array<{ icon: LucideIcon; title: string }> = [
   { icon: BarChart3, title: "Diagnostic offert" },
   { icon: Shield, title: "Tarifs négociés" },
@@ -34,23 +36,19 @@ const FEATURES: Array<{ icon: LucideIcon; title: string }> = [
   { icon: Crown, title: "Statut Fondateur" },
 ];
 
-/* ───── Animation variants ───── */
+/* ───── Reduced motion hook ───── */
 
-const stagger = {
-  hidden: {},
-  visible: {
-    transition: { delayChildren: 0.25, staggerChildren: 0.08 },
-  },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 14 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring" as const, bounce: 0.15, duration: 0.7 },
-  },
-};
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return reduced;
+}
 
 /* ───── Page ───── */
 
@@ -58,6 +56,7 @@ export default function Home() {
   const [time, setTime] = useState<TimeLeft>(getTimeLeft);
   const [count, setCount] = useState(73);
   const [ticked, setTicked] = useState(false);
+  const noMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const id = setInterval(() => setTime(getTimeLeft()), 1000);
@@ -79,81 +78,136 @@ export default function Home() {
       <GlassBackground />
 
       <section className="hero" aria-labelledby="wl-title">
-        <motion.div
-          className="hero-content"
-          initial="hidden"
-          animate="visible"
-          variants={stagger}
-        >
-          <motion.span className="badge" variants={fadeUp}>
-            ✨ Accès avant-première
+        <div className="hero-content">
+          {/* ── Eyebrow ── */}
+          <motion.span
+            className="eyebrow"
+            initial={noMotion ? false : { clipPath: "inset(0 100% 0 0)" }}
+            animate={{ clipPath: "inset(0 0% 0 0)" }}
+            transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+          >
+            Score La Loge
           </motion.span>
 
-          <motion.h1 id="wl-title" className="title" variants={fadeUp}>
-            Entrez dans le cercle.
-          </motion.h1>
+          {/* ── Title — word-by-word reveal ── */}
+          <h1 id="wl-title" className="title">
+            {TITLE_WORDS.map((word, i) => (
+              <Fragment key={i}>
+                <span className="word-mask">
+                  <motion.span
+                    className="word"
+                    initial={noMotion ? false : { y: "110%" }}
+                    animate={{ y: "0%" }}
+                    transition={{
+                      duration: 0.6,
+                      delay: 0.2 + i * 0.16,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    {word}
+                  </motion.span>
+                </span>
+              </Fragment>
+            ))}
+          </h1>
 
-          <motion.p className="subtitle" variants={fadeUp}>
+          {/* ── Subtitle ── */}
+          <motion.p
+            className="subtitle"
+            initial={noMotion ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
             La conciergerie beauté pour salons d&apos;exception.
           </motion.p>
 
-          <motion.div variants={fadeUp} className="form-section">
-            <WaitlistForm />
-          </motion.div>
-
+          {/* ── Form card — liquid glass ── */}
           <motion.div
-            className="scarcity"
-            variants={fadeUp}
-            aria-label="Disponibilité limitée"
+            className="form-section"
+            initial={noMotion ? false : { y: 20, scale: 0.96, opacity: 0 }}
+            animate={{ y: 0, scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
           >
-            <p className={`scarcity-heading${ticked ? " ticked" : ""}`}>
-              🔥 {count}/100 — Plus que {100 - count} places
-            </p>
-            <div
-              className="scarcity-bar"
-              role="progressbar"
-              aria-label={`${count} sur 100 salons fondateurs déjà inscrits`}
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={count}
-            >
-              <span
-                className="scarcity-fill"
-                style={{ width: `${count}%` }}
-              />
+            <div className="form-card liquid-glass">
+              <WaitlistForm />
             </div>
           </motion.div>
 
-          <motion.div className="features" variants={fadeUp}>
-            {FEATURES.map(({ icon: Icon, title }) => (
-              <div key={title} className="feature-pill">
-                <div className="feature-pill-icon" aria-hidden="true">
-                  <Icon size={16} strokeWidth={1.8} />
-                </div>
-                <span className="feature-pill-title">{title}</span>
+          {/* ── Scarcity ── */}
+          <motion.div
+            className="scarcity"
+            initial={noMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.9 }}
+            aria-label="Disponibilité limitée"
+          >
+            <div className="scarcity-bar-row">
+              <div
+                className="scarcity-track"
+                role="progressbar"
+                aria-label={`${count} sur 100 salons fondateurs déjà inscrits`}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={count}
+              >
+                <motion.span
+                  className="scarcity-fill"
+                  initial={noMotion ? false : { width: "0%" }}
+                  animate={{ width: `${count}%` }}
+                  transition={{ duration: 1.2, delay: 1, ease: "easeOut" }}
+                />
               </div>
-            ))}
+              <span className="scarcity-pct">{count}%</span>
+            </div>
+            <p className={`scarcity-label${ticked ? " ticked" : ""}`}>
+              {count}/100 places fondateur
+            </p>
           </motion.div>
 
-          <motion.div className="bottom-info" variants={fadeUp}>
+          {/* ── Feature pills ── */}
+          <div className="features">
+            {FEATURES.map(({ icon: Icon, title }, i) => (
+              <motion.div
+                key={title}
+                className="feature-pill liquid-glass"
+                initial={noMotion ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 1.1 + i * 0.065,
+                  ease: "easeOut",
+                }}
+              >
+                <div className="feature-pill-icon" aria-hidden="true">
+                  <Icon size={18} strokeWidth={1.6} />
+                </div>
+                <span className="feature-pill-title">{title}</span>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* ── Bottom info ── */}
+          <motion.div
+            className="bottom-info"
+            initial={noMotion ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.4 }}
+          >
             <span className="countdown-compact" aria-label="Compte à rebours">
-              {String(time.days).padStart(2, "0")}j :{" "}
-              {String(time.hours).padStart(2, "0")}h :{" "}
-              {String(time.minutes).padStart(2, "0")}m
+              {time.days}J · {time.hours}H · {time.minutes}M
             </span>
-            <span className="info-dot" aria-hidden="true" />
             <span className="social-compact">
-              1 700+ salons analysés · Rejoignez les {count} fondateurs
+              1 700+ salons analysés
             </span>
           </motion.div>
-        </motion.div>
+        </div>
       </section>
 
       <footer className="footer">
         <div className="footer-inner">
-          <span>La Loge</span>
-          <span className="footer-dot" />
-          <span>Conciergerie Beauté</span>
+          <span className="footer-line" />
+          <span>La Loge · Beauté</span>
+          <span className="footer-line" />
         </div>
       </footer>
     </div>

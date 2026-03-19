@@ -27,7 +27,12 @@ function getTimeLeft() {
 
 type TimeLeft = ReturnType<typeof getTimeLeft>;
 
-const TITLE_WORDS = ["Entrez", "dans", "le", "cercle."];
+const TITLE_WORDS: Array<{ text: string; italic?: boolean }> = [
+  { text: "Entrez" },
+  { text: "dans" },
+  { text: "le" },
+  { text: "cercle.", italic: true },
+];
 
 const FEATURES: Array<{ icon: LucideIcon; title: string }> = [
   { icon: BarChart3, title: "Diagnostic offert" },
@@ -35,6 +40,8 @@ const FEATURES: Array<{ icon: LucideIcon; title: string }> = [
   { icon: MessageCircle, title: "Concierge dédié" },
   { icon: Crown, title: "Statut Ambassadeur" },
 ];
+
+const EASE_OUT_STRONG: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 /* ───── Reduced motion hook ───── */
 
@@ -77,9 +84,30 @@ export default function Home() {
     <div className="page">
       <GlassBackground />
 
+      {/* ── SVG Displacement Filter (hidden) ── */}
+      <svg width="0" height="0" style={{ position: "absolute" }}>
+        <filter id="lg-f">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.0055 0.008"
+            numOctaves={2}
+            seed={6}
+            stitchTiles="stitch"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale={11}
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </svg>
+
       <section className="hero" aria-labelledby="wl-title">
         <div className="hero-content">
-          {/* ── Eyebrow ── */}
+          {/* ── Eyebrow — clip-path reveal ── */}
           <motion.span
             className="eyebrow"
             initial={noMotion ? false : { clipPath: "inset(0 100% 0 0)" }}
@@ -89,22 +117,22 @@ export default function Home() {
             Score La Loge
           </motion.span>
 
-          {/* ── Title — word-by-word reveal ── */}
+          {/* ── Title — word-by-word kinetic reveal ── */}
           <h1 id="wl-title" className="title">
             {TITLE_WORDS.map((word, i) => (
               <Fragment key={i}>
                 <span className="word-mask">
                   <motion.span
-                    className="word"
+                    className={`word${word.italic ? " word--italic" : ""}`}
                     initial={noMotion ? false : { y: "110%" }}
                     animate={{ y: "0%" }}
                     transition={{
-                      duration: 0.6,
-                      delay: 0.2 + i * 0.16,
-                      ease: [0.22, 1, 0.36, 1],
+                      duration: 1,
+                      delay: 0.38 + i * 0.16,
+                      ease: EASE_OUT_STRONG,
                     }}
                   >
-                    {word}
+                    {word.text}
                   </motion.span>
                 </span>
               </Fragment>
@@ -116,19 +144,24 @@ export default function Home() {
             className="subtitle"
             initial={noMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ duration: 0.7, delay: 0.9 }}
           >
             La conciergerie beauté pour salons d&apos;exception.
           </motion.p>
 
-          {/* ── Form card — liquid glass ── */}
+          {/* ── Form card — liquid glass + glimmer sweep ── */}
           <motion.div
             className="form-section"
             initial={noMotion ? false : { y: 20, scale: 0.96, opacity: 0 }}
             animate={{ y: 0, scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
+            transition={{
+              duration: 1.2,
+              delay: 1.0,
+              ease: EASE_OUT_STRONG,
+            }}
           >
-            <div className="form-card liquid-glass">
+            <div className="form-card liquid-glass liquid-glass--form">
+              <span className="form-glimmer" aria-hidden="true" />
               <WaitlistForm />
             </div>
           </motion.div>
@@ -138,7 +171,7 @@ export default function Home() {
             className="scarcity"
             initial={noMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.9 }}
+            transition={{ duration: 0.5, delay: 1.1 }}
             aria-label="Disponibilité limitée"
           >
             <div className="scarcity-bar-row">
@@ -154,7 +187,7 @@ export default function Home() {
                   className="scarcity-fill"
                   initial={noMotion ? false : { width: "0%" }}
                   animate={{ width: `${count}%` }}
-                  transition={{ duration: 1.2, delay: 1, ease: "easeOut" }}
+                  transition={{ duration: 1.4, delay: 1.2, ease: "easeOut" }}
                 />
               </div>
               <span className="scarcity-pct">{count}%</span>
@@ -164,18 +197,18 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* ── Feature pills ── */}
+          {/* ── Feature pills — staggered entry ── */}
           <div className="features">
             {FEATURES.map(({ icon: Icon, title }, i) => (
               <motion.div
                 key={title}
-                className="feature-pill liquid-glass"
+                className="feature-pill liquid-glass liquid-glass--pill"
                 initial={noMotion ? false : { opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
                   duration: 0.5,
-                  delay: 1.1 + i * 0.065,
-                  ease: "easeOut",
+                  delay: 1.3 + i * 0.065,
+                  ease: EASE_OUT_STRONG,
                 }}
               >
                 <div className="feature-pill-icon" aria-hidden="true">
@@ -186,19 +219,17 @@ export default function Home() {
             ))}
           </div>
 
-          {/* ── Bottom info ── */}
+          {/* ── Bottom info — countdown + social proof ── */}
           <motion.div
             className="bottom-info"
             initial={noMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.4 }}
+            transition={{ duration: 0.6, delay: 1.5 }}
           >
             <span className="countdown-compact" aria-label="Compte à rebours">
               {time.days}J · {time.hours}H · {time.minutes}M
             </span>
-            <span className="social-compact">
-              1 700+ salons analysés
-            </span>
+            <span className="social-compact">1 700+ salons analysés</span>
           </motion.div>
         </div>
       </section>

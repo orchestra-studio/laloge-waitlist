@@ -35,20 +35,22 @@ export function WaitlistForm() {
           </label>
 
           <button type="submit" disabled={isPending} className="form-btn">
-            {isPending ? "Envoi…" : "🔒 Réserver ma place"}
+            {isPending ? "Envoi…" : "Réserver ma place"}
           </button>
         </div>
       </form>
 
       {state.status !== "idle" && (
-        <p className={`feedback ${state.status}`} role="status" aria-live="polite">
+        <p
+          className={`feedback ${state.status}`}
+          role="status"
+          aria-live="polite"
+        >
           {state.message}
         </p>
       )}
 
-      <p className="micro-text">
-        Sans engagement · Gratuit
-      </p>
+      <p className="micro-text">Sans engagement · Gratuit</p>
     </div>
   );
 }

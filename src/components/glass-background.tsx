@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-/* Generate particle data at module level — stable across renders */
+/* ── Particle data — stable across renders ── */
 const ALL_PARTICLES = Array.from({ length: 38 }, (_, i) => ({
   id: i,
   left: Math.random() * 100,
@@ -25,13 +25,20 @@ export function GlassBackground() {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  const particles = isMobile
-    ? ALL_PARTICLES.slice(0, 12)
-    : ALL_PARTICLES;
+  const particles = isMobile ? ALL_PARTICLES.slice(0, 12) : ALL_PARTICLES;
 
   return (
     <div className="glass-bg" aria-hidden="true">
-      {/* Layer 2 — Organic wave shapes */}
+      {/* Layer 1 — 5 Morphing orbs (bronze/sand/crème palette) */}
+      <div className="glass-bg-orbs">
+        <div className="orb orb-1" />
+        <div className="orb orb-2" />
+        <div className="orb orb-3" />
+        <div className="orb orb-4" />
+        <div className="orb orb-5" />
+      </div>
+
+      {/* Layer 2 — Subtle organic wave shapes */}
       <svg
         className="glass-bg-waves"
         viewBox="0 0 1440 900"
@@ -75,17 +82,14 @@ export function GlassBackground() {
         ))}
       </div>
 
-      {/* Layer 4 — Sunrise light glow (brighter & bigger) */}
-      <div className="glass-bg-glow" />
-
-      {/* Layer 5 — Dense algorithm ecosystem (Score La Loge data network) */}
+      {/* Layer 4 — Algorithm constellation network (Score La Loge) */}
       <svg
         className="glass-bg-network"
         viewBox="0 0 1000 1000"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* ── Concentric scanning rings (6) ── */}
+        {/* Concentric scanning rings */}
         <circle cx="500" cy="500" r="80" stroke="#9E8B6E" strokeWidth="0.6" opacity="0.16" strokeDasharray="3 5" />
         <circle cx="500" cy="500" r="150" stroke="#9E8B6E" strokeWidth="0.7" opacity="0.14" strokeDasharray="5 8" />
         <circle cx="500" cy="500" r="250" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" strokeDasharray="2 6" />
@@ -93,7 +97,7 @@ export function GlassBackground() {
         <circle cx="500" cy="500" r="450" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.09" strokeDasharray="1 8" />
         <circle cx="500" cy="500" r="520" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.08" strokeDasharray="2 12" />
 
-        {/* ── Primary constellation — outer polygon (10 vertices) ── */}
+        {/* Outer polygon constellation (10 vertices) */}
         <line x1="920" y1="460" x2="860" y2="680" stroke="#9E8B6E" strokeWidth="0.9" opacity="0.20" />
         <line x1="860" y1="680" x2="700" y2="840" stroke="#9E8B6E" strokeWidth="1" opacity="0.22" />
         <line x1="700" y1="840" x2="480" y2="910" stroke="#9E8B6E" strokeWidth="0.8" opacity="0.18" />
@@ -105,7 +109,7 @@ export function GlassBackground() {
         <line x1="370" y1="90" x2="620" y2="80" stroke="#9E8B6E" strokeWidth="0.8" opacity="0.18" />
         <line x1="620" y1="80" x2="920" y2="460" stroke="#9E8B6E" strokeWidth="1" opacity="0.15" />
 
-        {/* ── Secondary constellation — inner hexagon (6 vertices) ── */}
+        {/* Inner hexagon */}
         <line x1="720" y1="500" x2="610" y2="690" stroke="#9E8B6E" strokeWidth="0.6" opacity="0.16" />
         <line x1="610" y1="690" x2="390" y2="690" stroke="#9E8B6E" strokeWidth="0.6" opacity="0.14" />
         <line x1="390" y1="690" x2="280" y2="500" stroke="#9E8B6E" strokeWidth="0.6" opacity="0.16" />
@@ -113,7 +117,7 @@ export function GlassBackground() {
         <line x1="390" y1="310" x2="610" y2="310" stroke="#9E8B6E" strokeWidth="0.6" opacity="0.16" />
         <line x1="610" y1="310" x2="720" y2="500" stroke="#9E8B6E" strokeWidth="0.6" opacity="0.14" />
 
-        {/* ── Hub spokes — center to inner nodes (6) ── */}
+        {/* Hub spokes */}
         <line x1="500" y1="500" x2="720" y2="500" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
         <line x1="500" y1="500" x2="610" y2="690" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.10" />
         <line x1="500" y1="500" x2="390" y2="690" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
@@ -121,7 +125,7 @@ export function GlassBackground() {
         <line x1="500" y1="500" x2="390" y2="310" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
         <line x1="500" y1="500" x2="610" y2="310" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.10" />
 
-        {/* ── Cross-links — inner to outer data connections (15) ── */}
+        {/* Cross-links inner→outer */}
         <line x1="720" y1="500" x2="920" y2="460" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
         <line x1="720" y1="500" x2="860" y2="680" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.10" />
         <line x1="610" y1="690" x2="700" y2="840" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
@@ -138,12 +142,12 @@ export function GlassBackground() {
         <line x1="280" y1="500" x2="260" y2="840" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.09" />
         <line x1="610" y1="690" x2="260" y2="840" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.08" />
 
-        {/* ── Cross-hexagon diagonals ── */}
+        {/* Cross-hexagon diagonals */}
         <line x1="720" y1="500" x2="390" y2="690" stroke="#9E8B6E" strokeWidth="0.35" opacity="0.07" />
         <line x1="610" y1="690" x2="390" y2="310" stroke="#9E8B6E" strokeWidth="0.35" opacity="0.07" />
         <line x1="280" y1="500" x2="610" y2="310" stroke="#9E8B6E" strokeWidth="0.35" opacity="0.07" />
 
-        {/* ── Outer major nodes (10) ── */}
+        {/* Outer major nodes */}
         <circle cx="920" cy="460" r="3.5" fill="#9E8B6E" opacity="0.28" />
         <circle cx="860" cy="680" r="3" fill="#9E8B6E" opacity="0.24" />
         <circle cx="700" cy="840" r="4" fill="#9E8B6E" opacity="0.26" />
@@ -155,7 +159,7 @@ export function GlassBackground() {
         <circle cx="370" cy="90" r="3.5" fill="#9E8B6E" opacity="0.28" />
         <circle cx="620" cy="80" r="3" fill="#9E8B6E" opacity="0.24" />
 
-        {/* ── Inner secondary nodes (6) ── */}
+        {/* Inner secondary nodes */}
         <circle cx="720" cy="500" r="3" fill="#9E8B6E" opacity="0.22" />
         <circle cx="610" cy="690" r="2.5" fill="#9E8B6E" opacity="0.20" />
         <circle cx="390" cy="690" r="3" fill="#9E8B6E" opacity="0.22" />
@@ -163,33 +167,10 @@ export function GlassBackground() {
         <circle cx="390" cy="310" r="3" fill="#9E8B6E" opacity="0.22" />
         <circle cx="610" cy="310" r="2.5" fill="#9E8B6E" opacity="0.20" />
 
-        {/* ── Center hub ── */}
+        {/* Center hub */}
         <circle cx="500" cy="500" r="5" fill="#9E8B6E" opacity="0.30" />
 
-        {/* ── Tick marks on r=450 ring (every 30°) ── */}
-        <line x1="950" y1="500" x2="956" y2="500" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
-        <line x1="890" y1="725" x2="895" y2="728" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
-        <line x1="725" y1="890" x2="728" y2="893" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.10" />
-        <line x1="500" y1="950" x2="500" y2="956" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
-        <line x1="275" y1="890" x2="272" y2="893" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.10" />
-        <line x1="110" y1="725" x2="107" y2="728" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
-        <line x1="50" y1="500" x2="44" y2="500" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
-        <line x1="110" y1="275" x2="107" y2="272" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.10" />
-        <line x1="275" y1="110" x2="272" y2="107" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
-        <line x1="500" y1="50" x2="500" y2="44" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.10" />
-        <line x1="725" y1="110" x2="728" y2="107" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.12" />
-        <line x1="890" y1="275" x2="893" y2="272" stroke="#9E8B6E" strokeWidth="0.5" opacity="0.10" />
-
-        {/* ── Tick marks on r=520 ring (every ~40°) ── */}
-        <line x1="1020" y1="500" x2="1026" y2="500" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.10" />
-        <line x1="898" y1="834" x2="903" y2="838" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.10" />
-        <line x1="240" y1="950" x2="237" y2="953" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.10" />
-        <line x1="12" y1="678" x2="6" y2="680" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.10" />
-        <line x1="12" y1="322" x2="6" y2="320" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.10" />
-        <line x1="240" y1="50" x2="237" y2="47" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.10" />
-        <line x1="898" y1="166" x2="903" y2="162" stroke="#9E8B6E" strokeWidth="0.4" opacity="0.10" />
-
-        {/* ── Data scatter dots (25) ── */}
+        {/* Data scatter dots */}
         <circle cx="800" cy="350" r="1.2" fill="#9E8B6E" opacity="0.16" />
         <circle cx="830" cy="570" r="1" fill="#9E8B6E" opacity="0.14" />
         <circle cx="780" cy="760" r="1.5" fill="#9E8B6E" opacity="0.18" />
@@ -216,7 +197,7 @@ export function GlassBackground() {
         <circle cx="680" cy="250" r="1.5" fill="#9E8B6E" opacity="0.17" />
         <circle cx="170" cy="610" r="1" fill="#9E8B6E" opacity="0.14" />
 
-        {/* ── Score La Loge data fragments ── */}
+        {/* Score La Loge data fragments */}
         <text x="740" y="485" fill="#9E8B6E" opacity="0.15" fontSize="7" fontFamily="monospace">8.7</text>
         <text x="370" y="705" fill="#9E8B6E" opacity="0.13" fontSize="6" fontFamily="monospace">96%</text>
         <text x="600" y="325" fill="#9E8B6E" opacity="0.14" fontSize="7" fontFamily="monospace">A+</text>
